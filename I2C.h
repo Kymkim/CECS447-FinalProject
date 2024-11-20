@@ -3,8 +3,8 @@
  *
  *	Provides the I2C Init, Read, and Write Function
  *
- * Created on: May 24th, 2023
- *		Author: Jackie Huynh
+ * Created on: November 13, 2024
+ *		Author: Oliver Cabral and Jason Chan
  *
  */
 
@@ -15,22 +15,26 @@
 #include "tm4c123gh6pm.h"
 #include "util.h"
 
+#include "UART0.h"
+
 /* List of Fill In Macros */
 
 //Init Function
-#define EN_I2C0_CLOCK			(CONSTANT_FILL)
-#define EN_GPIOB_CLOCK		(CONSTANT_FILL)
-#define I2C0_PINS					(CONSTANT_FILL)
-#define I2C0_ALT_FUNC_MSK	(CONSTANT_FILL)
-#define I2C0_ALT_FUNC_SET	(CONSTANT_FILL)
-#define I2C0_SDA_PIN			(CONSTANT_FILL)
-#define I2C0_SCL_PIN			(CONSTANT_FILL)
-#define EN_I2C0_MASTER		(CONSTANT_FILL)
-#define I2C_MTPR_TPR_VALUE	(CONSTANT_FILL)
-#define I2C_MTPR_STD_SPEED (CONSTANT_FILL)
+//B2 = SCL
+//B3 = SDA
+#define EN_I2C0_CLOCK			(0x1)
+#define EN_GPIOB_CLOCK		(0x2)
+#define I2C0_PINS					(0xC)
+#define I2C0_ALT_FUNC_MSK	(0xFFFF00FF)
+#define I2C0_ALT_FUNC_SET	(0x00003300)
+#define I2C0_SDA_PIN			(0x8)
+#define I2C0_SCL_PIN			(0x4)
+#define EN_I2C0_MASTER		(0x10)
+#define I2C_MTPR_TPR_VALUE	(19)
+#define I2C_MTPR_STD_SPEED (0x00)
 
 //Transmit Function (Most came from above Macros)
-#define I2C0_RW_PIN				(CONSTANT_FILL)
+#define I2C0_RW_PIN				(0x1)
 
 //Burst Transmit Function
 #define RUN_CMD						(CONSTANT_FILL)

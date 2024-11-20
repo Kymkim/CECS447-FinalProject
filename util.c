@@ -21,7 +21,7 @@ void WTIMER0_Init(void){
 	SYSCTL_RCGCWTIMER_R |= EN_WTIMER0_CLOCK;						//Enable WTIMER0 Clock
 	
 	//Wait Until WTIMER0 Clock has be activated
-	while((SYSCTL_RCGCWTIMER_R&EN_WTIMER0_CLOCK)!=EN_WTIMER0_CLOCK);
+	//while((SYSCTL_RCGCWTIMER_R&EN_WTIMER0_CLOCK)!=EN_WTIMER0_CLOCK);
 	
 	WTIMER0_CTL_R &= ~(WTIMER0_TAEN_BIT);									//Disable WTIMER0 Timer A
 	WTIMER0_CFG_R |= WTIMER0_32_BIT_CFG;								//Set WTIMER0 to be 32-bit config mode

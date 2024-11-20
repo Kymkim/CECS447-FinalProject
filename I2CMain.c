@@ -5,8 +5,8 @@
  *	TCS34727 RGB Sensor and MPU6050 6-dof IMU, as well as controlling
  *	a Servo Motor and a 16x2 LCD 
  *
- * Created on: May 24th, 2023
- *		Author: Jackie Huynh
+ * Created on: November 13, 2024
+ *		Author: Oliver Cabral and Jason Chan
  *
  */
  
@@ -24,12 +24,12 @@
 #include "ModuleTest.h"
 
 /* List of Predefined Macros for individual Peripheral Testing */
-#define DELAY
+//#define DELAY
 //#define UART
 //#define I2C
 //#define TCS34727
 //#define MPU6050
-//#define SERVO
+#define SERVO
 //#define LCD
 //#define FULL_SYSTEM
 
@@ -60,6 +60,7 @@ int main(void){
 	
 	#if defined(SERVO) || defined(FULL_SYSTEM)
 	/* Servo Initialization */
+	WTIMER0_Init();
 	Servo_Init();
 	#endif
 	

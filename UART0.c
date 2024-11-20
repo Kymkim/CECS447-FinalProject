@@ -17,8 +17,8 @@ void UART0_Init(void){
   SYSCTL_RCGC1_R |= SYSCTL_RCGC1_UART0; // activate UART0
   SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOA; // activate port A
   UART0_CTL_R = 0;                      // disable UART
-  UART0_IBRD_R = CONSTANT_FILL;            // IBRD = ?
-  UART0_FBRD_R = CONSTANT_FILL;            // FBRD = ?
+  UART0_IBRD_R = 17;            // IBRD = ?
+  UART0_FBRD_R = 18;            // FBRD = ?
                                         // 8 bit word length (no parity bits, one stop bit, FIFOs)
   UART0_LCRH_R = (UART_LCRH_WLEN_8|UART_LCRH_FEN);
   UART0_CTL_R |= UART_CTL_RXE|UART_CTL_TXE|UART_CTL_UARTEN;// enable Tx, RX and UART

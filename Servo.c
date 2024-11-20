@@ -38,6 +38,8 @@ void Servo_Init(void){
 	Default 16MHz and a 16-bit counter won't be enough
 	Will Need to Prescale the PWM Clock
 	
+	
+	
 	Example: 
 	PWM Clock = System Clock / Prescaler = 40MHz / 16 = 2.5MHz
 	Time Per Tick = 1 / PWM Clock = 1 / 2.5MHz = 0.4us

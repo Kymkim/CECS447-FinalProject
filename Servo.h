@@ -18,27 +18,27 @@
 // USE HARDWARE PWM MODULE 0 GEN 0 CHANNEL 0 PB6
 
 /* List of Fill In Macros */
-#define EN_PWM0_GPIOB_CLOCK		(CONSTANT_FILL)
-#define PWM0_PIN							(CONSTANT_FILL)
-#define CLEAR_ALT_FUNCTION		(CONSTANT_FILL)
-#define PWM0_ALT_FUNCTION			(CONSTANT_FILL)
-#define EN_PWM0_CLOCK					(CONSTANT_FILL)
-#define EN_USE_PWM_DIV				(CONSTANT_FILL)
-#define CLEAR_PWM_DIV					(CONSTANT_FILL)
-#define PWM0_DIV_VALUE				(CONSTANT_FILL)
-#define PWM0_DEFAULT_CONFIG		(CONSTANT_FILL)
-#define PWM0_GEN_CONFIG				(CONSTANT_FILL)
-#define PWM0_COUNTER					(CONSTANT_FILL)
-#define PWM0_START						(CONSTANT_FILL)
-#define EN_PWM0_FUNCTION			(CONSTANT_FILL)
+#define EN_PWM0_GPIOB_CLOCK		(0x00000002)
+#define PWM0_PIN							(0x00000040)
+#define CLEAR_ALT_FUNCTION		(0x0F000000)
+#define PWM0_ALT_FUNCTION			(0x04000000)
+#define EN_PWM0_CLOCK					(0x00000001)
+#define EN_USE_PWM_DIV				(0x00100000)
+#define CLEAR_PWM_DIV					(0x000E0000)
+#define PWM0_DIV_VALUE				(0x00040000)
+#define PWM0_DEFAULT_CONFIG		(0x00000000)
+#define PWM0_GEN_CONFIG				(0x000000C8)
+#define PWM0_COUNTER					(40000)
+#define PWM0_START						(0x00000001)
+#define EN_PWM0_FUNCTION			(0x00000001)
 
 /* 0.5ms (2.5%) - 2.5ms (12.5%) Duty Cycle */
-#define SERVO_MIN_CNT					(CONSTANT_FILL)					
-#define SERVO_MAX_CNT					(CONSTANT_FILL)					
+#define SERVO_MIN_CNT					((int16_t)1000)					
+#define SERVO_MAX_CNT					((int16_t)5000)					
 
 /* Max Range of Either -90 to 90 or 0 to 180 */
-#define SERVO_MIN_ANGLE				(CONSTANT_FILL)	
-#define SERVO_MAX_ANGLE				(CONSTANT_FILL)
+#define SERVO_MIN_ANGLE				((int16_t)-90)	
+#define SERVO_MAX_ANGLE				((int16_t)90)
 
 /*
  *	-------------------Servo_Init------------------
