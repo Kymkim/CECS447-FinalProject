@@ -60,7 +60,6 @@ int main(void){
 	
 	#if defined(SERVO) || defined(FULL_SYSTEM)
 	/* Servo Initialization */
-	WTIMER0_Init();
 	Servo_Init();
 	#endif
 	

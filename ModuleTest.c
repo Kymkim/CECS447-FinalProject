@@ -218,40 +218,53 @@ static void Test_LCD(void){
 	/*CODE_FILL*/
 	LCD_Clear();
 	DELAY_1MS(10);
-	LCD_Set_Cursor(ROW1,4);
+	LCD_Set_Cursor(ROW1,5);
 	DELAY_1MS(10);
-	LCD_Print_Str((uint8_t *) "Hatsune");
+	LCD_Print_Str((uint8_t *) "Oliver");
 	DELAY_1MS(1000);
-	LCD_Set_Cursor(ROW2,4);
+	LCD_Set_Cursor(ROW2,5);
 	DELAY_1MS(10);
-	LCD_Print_Str((uint8_t *) "Miku");
+	LCD_Print_Str((uint8_t *) "Cabral");
 	DELAY_1MS(1000);
 }
 
 static void Test_Full_System(void){
 	/* Grab Accelerometer and Gyroscope Raw Data*/
-	/*CODE_FILL*/
+	MPU6050_Get_Accel(&Accel_Instance);
+	MPU6050_Get_Gyro(&Gyro_Instance);
+	
 		
 	/* Process Raw Accelerometer and Gyroscope Data */
-	/*CODE_FILL*/
+	MPU6050_Process_Accel(&Accel_Instance);
+	MPU6050_Process_Gyro(&Gyro_Instance);
 		
 	/* Calculate Tilt Angle */
-	/*CODE_FILL*/
+	MPU6050_Get_Angle(&Accel_Instance, &Gyro_Instance, &Angle_Instance);
 		
 	/* Drive Servo Accordingly to Tilt Angle on X-Axis*/
-	/*CODE_FILL*/
+	Drive_Servo(Angle_Instance.ArX);
 		
 	/* Format buffer to print MPU6050 data and angle */
-	/*CODE_FILL*/
+	sprintf(printBuf, "X: %f\r\nY: %f\r\nY: %f\r\n", Accel_Instance.Ax, Accel_Instance.Ay, Accel_Instance.Az);
+	UART0_OutString(printBuf);
+  UART0_OutString("Gyro Instance\r\n");
+	sprintf(printBuf, "X: %f\r\nY: %f\r\nY: %f\r\n", Gyro_Instance.Gx, Gyro_Instance.Gy, Gyro_Instance.Gz);
+	UART0_OutString(printBuf);
+	UART0_OutString("Angle Instance\r\n");
+	sprintf(printBuf, "X: %f Y: %f Z: %f", Angle_Instance.ArX, Angle_Instance.ArY, Angle_Instance.ArZ);
+	UART0_OutString(printBuf);
 		
 	/* Grab Raw Color Data From Sensor */
-	/*CODE_FILL*/
+	RGB_COLOR.R_RAW = TCS34727_GET_RAW_RED();
+	RGB_COLOR.G_RAW = TCS34727_GET_RAW_GREEN();
+	RGB_COLOR.B_RAW = TCS34727_GET_RAW_BLUE();
+	RGB_COLOR.C_RAW = TCS34727_GET_RAW_CLEAR();
 		
 	/* Process Raw Color Data to RGB Value */
-	/*CODE_FILL*/
+	TCS34727_GET_RGB(&RGB_COLOR);
 		
 	/* Change Onboard RGB LED Color to Detected Color */
-	switch(CODE_FILL){
+	switch(Detect_Color(&RGB_COLOR)){
 		case RED_DETECT:
 			LEDs = RED;
 			strcpy(colorString, "RED");
@@ -271,25 +284,22 @@ static void Test_Full_System(void){
 	}
 		
 	/* Format String to Print RGB value*/
-	/*CODE_FILL*/
+	sprintf(printBuf,"RED RAW: %x\r\nGREEN RAW: %x\r\nBLUE RAW: %x\r\n",RGB_COLOR.R_RAW, RGB_COLOR.G_RAW, RGB_COLOR.B_RAW);
 		
 	/* Print String to Terminal through USB */
-	/*CODE_FILL*/
+	UART0_OutString(printBuf);
 		
 	/* Update LCD With Current Angle and Color Detected */
-//	sprintf(angleBuf, "Angle:%0.2f\0", Angle_Instance.ArX);				//Format String to print angle to 2 Decimal Place
-//	sprintf(colorBuf, "Color:%s\0", colorString);									//Format String to print color detected
-
 	sprintf(angleBuf, "Angle:%0.2f", Angle_Instance.ArX);				//Format String to print angle to 2 Decimal Place
 	sprintf(colorBuf, "Color:%s", colorString);									//Format String to print color detected
 	
-	/*CODE_FILL*/						//Clear LCD
-	/*CODE_FILL*/						//Safety Delay of 2ms
-	/*CODE_FILL*/						//Set Cursor to Row 1 Column 0
-	/*CODE_FILL*/						//Print angleBuf String on LCD
-	/*CODE_FILL*/						//Safety Delay of 2ms
-	/*CODE_FILL*/						//Set Cursor to Row 2 Column 1
-	/*CODE_FILL*/						//Print colorBuf String on LCD	
+	LCD_Clear();						//Clear LCD
+	DELAY_1MS(2);						//Safety Delay of 2ms
+	LCD_Set_Cursor(ROW1,0);						//Set Cursor to Row 1 Column 0
+	LCD_Print_Str((uint8_t*)angleBuf);						//Print angleBuf String on LCD
+	DELAY_1MS(2);					//Safety Delay of 2ms
+	LCD_Set_Cursor(ROW2,0);						
+	LCD_Print_Str((uint8_t*)colorString);
 		
 	DELAY_1MS(20);
 }

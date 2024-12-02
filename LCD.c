@@ -182,6 +182,6 @@ void LCD_Print_Char(uint8_t data){
 void LCD_Print_Str(uint8_t* str){
 	while(*str){
 		LCD_Send_Data(*str++);
-		DELAY_1MS(10);
+		DELAY_1MS(1);
 	}
 }
