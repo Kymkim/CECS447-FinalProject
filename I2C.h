@@ -37,7 +37,7 @@
 #define I2C0_RW_PIN				(0x1)
 
 //Burst Transmit Function
-#define RUN_CMD						(CONSTANT_FILL)
+#define RUN_CMD						(I2C_MCS_RUN)
 
 /*
  *	-------------------I2C0_Init------------------

@@ -216,6 +216,16 @@ static void Test_Servo(void){
 static void Test_LCD(void){
 	/* Print Name to LCD at Center Location */
 	/*CODE_FILL*/
+	LCD_Clear();
+	DELAY_1MS(10);
+	LCD_Set_Cursor(ROW1,4);
+	DELAY_1MS(10);
+	LCD_Print_Str((uint8_t *) "Hatsune");
+	DELAY_1MS(1000);
+	LCD_Set_Cursor(ROW2,4);
+	DELAY_1MS(10);
+	LCD_Print_Str((uint8_t *) "Miku");
+	DELAY_1MS(1000);
 }
 
 static void Test_Full_System(void){

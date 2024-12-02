@@ -166,47 +166,47 @@ void I2C0_Burst_Receive(uint8_t slave_addr, uint8_t slave_reg_addr, uint8_t* dat
  */
 uint8_t I2C0_Burst_Transmit(uint8_t slave_addr, uint8_t slave_reg_addr, uint8_t* data, uint32_t size){
 	
-	char error;															//Temp Error Variable
+	char error; //Temp Error Variable
 	
 	/* Asserting Param */
 	if(size <= 0)
 		return 0;
 	
 	/* Check if I2C0 is busy */
-	while(CODE_FILL);
+	while (I2C0_MCS_R & I2C_MCS_BUSY);
 	
 	/* Configure I2C Slave Address, R/W Mode, and what to transmit */
-	I2C0_MSA_R = CODE_FILL;								//Slave Address is the first 7 MSB
-	I2C0_MSA_R &= CODE_FILL; 							//Clear LSB to write
-	I2C0_MDR_R = CODE_FILL;								//Transmit register addr to interact
+	I2C0_MSA_R = (slave_addr << 1);					//Slave Address is the first 7 MSB
+	I2C0_MSA_R &= ~I2C0_RW_PIN; 						// Clear LSB to write
+	I2C0_MDR_R = slave_reg_addr;						//Transmit register addr to interact
 	
 	/* Initiate I2C by generate a START bit and RUN cmd */
-	I2C0_MCS_R = CODE_FILL;
+	I2C0_MCS_R = I2C_MCS_RUN | I2C_MCS_START;
 	
 	/* Wait until write has been completed */
-	while(CODE_FILL);
+	while(I2C0_MCS_R & I2C_MCS_BUSY);
 	
 	/* Loop to Burst Transmit what is stored in data buffer */
 	while(size > 1){
 		
-		I2C0_MDR_R = CONSTANT_FILL;							//Deference Pointer from data array and load into data reg. Post-Increment the pointer after
+		I2C0_MDR_R = data[size-1];						//Deference Pointer from data array and load into data reg. Post-Increment the pointer after
 		I2C0_MCS_R = RUN_CMD;									//Initiate I2C RUN CMD
-		while(CODE_FILL);							//Wait until transmit is complete
+		while(I2C0_MCS_R & I2C_MCS_BUSY);
 		size--;																//Reduce size until 1 is left
 		
 	}
 	
-	I2C0_MDR_R = CONSTANT_FILL;								//Deference Pointer from data array and load into data reg
-	I2C0_MCS_R = CODE_FILL;							//Initiate I2C STOP condition and RUN CMD
+	I2C0_MDR_R = data[size-1];								//Deference Pointer from data array and load into data reg
+	I2C0_MCS_R = I2C_MCS_RUN | I2C_MCS_STOP;						//Initiate I2C STOP condition and RUN CMD
 	
-	/* Wait until write has been completed */
-	while(CODE_FILL);
+	/* Wait until write has been completed: check MCS register Busy bit */
+	while(I2C0_MCS_R & I2C_MCS_BUSY);
 	
-	/* Wait until bus isn't busy */
-	while(CODE_FILL);
+	/* Wait until bus isn't busy: check MCS register for I2C bus busy bit */
+	while(I2C0_MCS_R & I2C_MCS_BUSBSY);
 	
 	/* Check for any error */
-	error = CODE_FILL;
+	error = I2C0_MCS_R & 0x0E;
 	if(error != 0)
 		return error;
   else

@@ -27,14 +27,14 @@ static void LCD_Send_CMD(uint8_t cmd){
 	uint8_t cmd_array[4];								//Command Array to Burst Transmit
 	
 	/* Seperate Upper and Lower Nibble */
-	cmd_upper = CODE_FILL; // use UPPER_NIBBLE_MSK here
-	cmd_lower = CODE_FILL; // use UPPER_NIBBLE_MSK here
+	cmd_upper = cmd &  UPPER_NIBBLE_MSK; // use UPPER_NIBBLE_MSK here
+	cmd_lower = cmd << NIBBLE_SHIFT;     // use UPPER_NIBBLE_MSK here
 	
 	/* LCD I2C Message Pattern */
-	cmd_array[0] = cmd_upper | (BACKLIGHT|EN_Pin);
-	cmd_array[1] = cmd_upper | BACKLIGHT;
-	cmd_array[2] = cmd_lower | (BACKLIGHT|EN_Pin);
-	cmd_array[3] = cmd_lower | BACKLIGHT;
+	cmd_array[3] = cmd_upper | (BACKLIGHT|EN_Pin);
+	cmd_array[2] = cmd_upper | BACKLIGHT;
+	cmd_array[1] = cmd_lower | (BACKLIGHT|EN_Pin);
+	cmd_array[0] = cmd_lower | BACKLIGHT;
 	
 	/* I2C Burst Transmit Command Array to LCD */
 	I2C0_Burst_Transmit(LCD_WRITE_ADDR, PCF8574A_REG, cmd_array, sizeof(cmd_array));
@@ -53,14 +53,14 @@ static void LCD_Send_Data(uint8_t data){
 	uint8_t data_array[4];							//Data Array to Burst Transmit
 	
 	/* Seperate Upper and Lower Nibble */
-	data_upper = CODE_FILL; // use UPPER_NIBBLE_MSK here
-	data_lower = CODE_FILL; // use UPPER_NIBBLE_MSK here
+	data_upper = data & UPPER_NIBBLE_MSK; // use UPPER_NIBBLE_MSK here
+	data_lower = data << NIBBLE_SHIFT;     // use UPPER_NIBBLE_MSK here
 	
 	/* LCD I2C Message Pattern */
-	data_array[0] = data_upper | (BACKLIGHT|EN_Pin|RS_Pin);
-	data_array[1] = data_upper | (BACKLIGHT|RS_Pin);
-	data_array[2] = data_lower | (BACKLIGHT|EN_Pin|RS_Pin);
-	data_array[3] = data_lower | (BACKLIGHT|RS_Pin);
+	data_array[3] = data_upper | (BACKLIGHT|EN_Pin|RS_Pin);
+	data_array[2] = data_upper | (BACKLIGHT|RS_Pin);
+	data_array[1] = data_lower | (BACKLIGHT|EN_Pin|RS_Pin);
+	data_array[0] = data_lower | (BACKLIGHT|RS_Pin);
 	
 	/* I2C Burst Transmit Data Array to LCD */
 	I2C0_Burst_Transmit(LCD_WRITE_ADDR, PCF8574A_REG, data_array, sizeof(data_array));
@@ -74,14 +74,21 @@ static void LCD_Send_Data(uint8_t data){
  */
 void LCD_Init(void){
 	
+	//Some minor modification to the initialization 
+
 	/* Magic LCD Initialization */
 	DELAY_1MS(50);
+	I2C0_Transmit(LCD_WRITE_ADDR, PCF8574A_REG, 0x00); //Turn off RS and R/W 
+	
 	LCD_Send_CMD(INIT_REG_CMD);
 	DELAY_1MS(5);
+	
+	LCD_Send_CMD(INIT_REG_CMD);
+	DELAY_1MS(5);
+	
 	LCD_Send_CMD(INIT_REG_CMD);
 	DELAY_1MS(1);
-	LCD_Send_CMD(INIT_REG_CMD);
-	DELAY_1MS(10);
+	
 	LCD_Send_CMD(INIT_FUNC_CMD);
 	DELAY_1MS(10);
 	
@@ -104,7 +111,6 @@ void LCD_Init(void){
 	
 	//Turn on Display with cursor and blink enable
 	LCD_Send_CMD(DISP_CMD|DISP_ON|DISP_CURSOR_ON|DISP_BLINK_ON);
-	
 }
 
 /*
@@ -176,6 +182,6 @@ void LCD_Print_Char(uint8_t data){
 void LCD_Print_Str(uint8_t* str){
 	while(*str){
 		LCD_Send_Data(*str++);
-		DELAY_1MS(2);
+		DELAY_1MS(10);
 	}
 }

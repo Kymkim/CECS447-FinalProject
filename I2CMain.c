@@ -29,8 +29,8 @@
 //#define I2C
 //#define TCS34727
 //#define MPU6050
-#define SERVO
-//#define LCD
+//#define SERVO
+#define LCD
 //#define FULL_SYSTEM
 
 int main(void){
